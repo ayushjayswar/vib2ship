@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last-Minute Life Saver</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Last-Minute Life Saver</h1>
+        <p class="subtitle">AI-powered task manager that helps you never miss a deadline!</p>
+        <div class="input-section">
+            <textarea id="taskInput" placeholder="Enter your tasks here...
+Example:
+- Submit assignment (deadline: tomorrow)
+- Prepare for meeting (deadline: 2 days)
+- Pay bill (deadline: today)"></textarea>
+            <button onclick="analyzeTasks()">⚡ Analyze & Prioritize</button>
+        </div>
+        <div class="result-section" id="resultSection" style="display:none">
+            <h2>📋 AI Recommendations</h2>
+            <div id="result"></div>
+        </div>
+    </div>
+    <script>
+        async function analyzeTasks() {
+            const tasks = document.getElementById("taskInput").value;
+            if (!tasks.trim()) {
+                alert("Please enter your tasks first!");
+                return;
+            }
+            document.getElementById("result").innerHTML = "⏳ AI is analyzing your tasks...";
+            document.getElementById("resultSection").style.display = "block";
+            const response = await fetch("/analyze", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tasks: tasks })
+            });
+            const data = await response.json();
+            document.getElementById("result").innerHTML = data.result.replace(/\n/g, "<br>");
+        }
+    </script>
+</body>
+</html>
